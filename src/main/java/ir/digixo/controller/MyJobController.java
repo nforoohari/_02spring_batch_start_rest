@@ -8,8 +8,6 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/job")
 public class MyJobController {
 
-    @Autowired
-    private JobLauncher jobLauncher;
+    final private JobLauncher jobLauncher;
+    final private Job firstJob;
 
-    @Autowired
-    @Qualifier("firstJob")
-    private Job firstJob;
+    public MyJobController(JobLauncher jobLauncher, Job firstJob) {
+        this.jobLauncher = jobLauncher;
+        this.firstJob = firstJob;
+    }
 
     //http://localhost:8080/job/start/firstjob
     @GetMapping("/start/{jobName}")
